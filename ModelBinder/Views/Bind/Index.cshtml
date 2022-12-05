@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Models
+@model List<Models.EnclosurePart>
+
+@{  
+    ViewBag.Title = "Index";  
+} 
+
+<h2>Parts Table</h2>
+
+@using (Html.BeginForm("Index", "Bind", FormMethod.Post, new List<EnclosurePart>()))
+{
+    @Html.AntiForgeryToken()
+    @*<form method="post">*@
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Delivery</th>
+                <th>Enclosure Id</th>
+                <th>Quantity</th>
+                <th>Tag</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.Hidden("model[" + @i + "].PartId", Model[@i].PartId)
+                        @Html.Hidden("model[" + @i + "].Id", Model[@i].Id)
+                        @Html.Hidden("model[" + @i + "].PartOrderId", Model[@i].PartOrderId)
+                        @Html.DropDownList("model[" + @i + "].Delivery",
+                @Html.GetEnumSelectList<OrderDelivery>())
+                        @*<select class="form-select" name="delivery" aria-label="Delivery" asp-items="@Html.GetEnumSelectList<OrderDelivery>()"></select>*@
+                    </td>
+                    <td>
+                        @Html.TextBox("model[" + @i + "].EnclosureId",  
+                Model[@i].EnclosureId)
+                        @*<input type="text" name="enclosure" value="@item.EnclosureId" />*@
+                    </td>
+                    <td>
+                        @Html.TextBox("model[" + @i + "].Quantity",  
+                Model[@i].Quantity)
+                        @*<input type="text" name="quantity" value="@item.Quantity" />*@
+                    </td>
+                    <td>
+                        @Html.TextBox("model[" + @i + "].Tag",  
+                Model[@i].Tag)
+                        @*<input type="text" name="tag" value="@item.Tag" />*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+    @*</form>*@
+}
